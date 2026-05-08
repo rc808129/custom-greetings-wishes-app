@@ -9,6 +9,27 @@
 
 ## Application WorkFlow
 
+- user enters signup or login details in the form. Form data is managed using useState on the frontend. After clicking the submit button, the frontend sends data to the backend using a POST API call. The backend stores user data in MongoDB, generates a JWT token, and sends the token to the frontend. The token is stored in localStorage, and the user is redirected to the profile setup page.
+
+- When the user clicks the Google login button, Firebase Authentication opens a Google popup using signInWithPopup(). After successful authentication, user details are sent to the backend using a post api call. The backend verifies or stores the user in MongoDB, generates a JWT token, and sends it to the frontend. The token is stored in localStorage, and the user is redirected to the profile setup page.
+
+- In the profile setup page, the username and profile image are managed using useState. After clicking the submit button, the frontend sends the username and image to the backend using formData and a PUT API call along with the JWT token from localStorage. The backend verifies the token using authMiddleware. Multer middlware is used to handle the uploaded image file received from FormData. The profile image is uploaded to Cloudinary, and the returned image URL along with the username is stored in MongoDB using the user schema.
+
+- Template images are imported into templates.js and stored in separate arrays based on categories like Birthday, Festival, and Relationship.
+- The HomePage component fetches user profile data using a GET API call and manages multiple states using useReducer.
+- Category filtering in handled using FilterButtons, and filtered template data is passed to TemplateGrid.
+- TemplatedGrid renders TemplateCard components using map() and passed user profile data and template data through props.
+- Props drilling is used from HomePage -> TemplateGrid -> TemplateCard to display the user's profile image and username on every template.
+
+
+- Each template card contains a Share button. When the user clicks the Share button, the handleShare() function runs. useRef is used to capture the complete template card, including the template image, username, and profile image.
+- html2canvas-pro converts the complete template card into a single image dynamically. The generated image is then shared using navigator.share().
+- A custom share popup is also implemented using state management. The popup contains WhatsApp, Instagram, Email, and Copy Link sharing options.
+- All templates are stored as objects inside arrays. Some templates contain isPremium: true. Conditional rendering is used to display a Premium badge on those templates.
+- When the user clicks the Share button on a premium template, the application checks template.isPremium. If it is true, a premium subscription popup opens instead of allowing image sharing.
+
+
+
 
 ## Problem Solving Approach
 
@@ -23,7 +44,6 @@
 - html2canvas-pro was used to generate personalized sharedable greeting images by merging templates, usernames, and profile images into a single image.
 
 - Premium template access was controlled using conditional rendering and subscription popup functionality
-
 
 
 ## Tech Stack
