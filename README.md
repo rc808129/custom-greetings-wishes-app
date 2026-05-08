@@ -42,6 +42,7 @@ Full-stack custom greetingsand wishes web app with authentication, personalized 
 
 ## Folder Structure
 
+```bash
 custom-greetings-wishes-webapp/
 
 ├── backend/
@@ -85,6 +86,7 @@ custom-greetings-wishes-webapp/
 │
 ├── README.md
 └── TECHNICAL_APPROACH.md
+```
 
 
 ## Installation
