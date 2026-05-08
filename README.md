@@ -97,30 +97,36 @@ git clone <repository-link>
 
 ### Frontend Setup
 
+```
 cd frontend
 npm install
 npm run dev
+```
 
 ### Backend Setup
 
+```
 cd backend
 npm install
 npm start
-
+```
 
 ## Environment Variables
 
 Create a .env file in backend folder and add:
 
+```env
 PORT=
 MONGO_URI=
 JWT_SECRET=
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
+```
 
 Create a .env file in frontend folder and add:
 
+```env
 VITE_API_BASE_URL=
 VITE_FIREBASE_API_KEY=
 VITE_FIREBASE_AUTH_DOMAIN=
@@ -129,6 +135,7 @@ VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
 VITE_FIREBASE_MEASUREMENT_ID=
+```
 
 
 ## API Endpoints
