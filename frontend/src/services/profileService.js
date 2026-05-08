@@ -1,11 +1,11 @@
 import axios from "axios"
 
-
+const API_URL = import.meta.env.VITE_API_BASE_URL;
 export const setupProfile = async (formData) => {
 
   const token = localStorage.getItem("token");
 
-  const response = await axios.put( "http://localhost:5000/api/profile/setup", formData, {
+  const response = await axios.put( `${API_URL}/profile/setup`, formData, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -17,7 +17,7 @@ export const setupProfile = async (formData) => {
 export const getUserProfile = async ()=> {
     const token = localStorage.getItem("token");
 
-     const response = await axios.get( "http://localhost:5000/api/profile/me", {
+     const response = await axios.get( `${API_URL}/profile/me`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
