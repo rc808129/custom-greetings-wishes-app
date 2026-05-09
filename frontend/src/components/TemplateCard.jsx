@@ -1,49 +1,41 @@
-import html2canvas from 'html2canvas-pro';
-import {useRef, useState} from 'react'
+import html2canvas from "html2canvas-pro";
+import { useRef, useState } from "react";
 
-import {FaWhatsapp, FaInstagram, FaEnvelope, FaCopy} from "react-icons/fa"
+import { FaWhatsapp, FaInstagram, FaEnvelope, FaCopy } from "react-icons/fa";
 const TemplateCard = ({
   template,
 
   user,
 }) => {
-
   const cardRef = useRef();
-  const [
+  const [showPremiumPopup, setShowPremiumPopup] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
 
-  showPremiumPopup,
+  const captureImage = async () => {
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        useCORS: true,
+        scale: 2,
+        backgroundColor: null, // ya "#000000"
+        logging: false,
+        allowTaint: true,
+      });
+      const imageUrl = canvas.toDataURL("image/png", 1.0);
+      setCapturedImage(imageUrl);
+      return imageUrl;
+    } catch (error) {
+      console.error("Capture error:", error);
+      alert("Image capture mein problem aa rahi hai");
+    }
+  };
 
-  setShowPremiumPopup
+  const handleShare = async () => {
+    if (template.isPremium) {
+      setShowPremiumPopup(true);
 
-] = useState(false);
-const [showShareMenu, setShowShareMenu] = useState(false);
-const [capturedImage, setCapturedImage] = useState(null);
-
- const captureImage = async () => {
-  try {
-    const canvas = await html2canvas(cardRef.current, {
-      useCORS: true,
-      scale: 2,
-      backgroundColor: null,     // ya "#000000"
-      logging: false,
-      allowTaint: true,
-    });
-    const imageUrl=  canvas.toDataURL("image/png", 1.0);
-    setCapturedImage(imageUrl)
-    return imageUrl
-  } catch (error) {
-    console.error("Capture error:", error);
-    alert("Image capture mein problem aa rahi hai");
-  }
-};
-
-const handleShare = async () => {
-  if (template.isPremium) {
-
-  setShowPremiumPopup(true);
-
-  return;
-}
+      return;
+    }
     const imageUrl = await captureImage();
     if (!imageUrl) return;
 
@@ -51,7 +43,9 @@ const handleShare = async () => {
     if (navigator.share) {
       try {
         const blob = await (await fetch(imageUrl)).blob();
-        const file = new File([blob], "greeting-card.png", { type: "image/png" });
+        const file = new File([blob], "greeting-card.png", {
+          type: "image/png",
+        });
 
         await navigator.share({
           title: `${user.userName}'s Birthday Wish`,
@@ -68,9 +62,12 @@ const handleShare = async () => {
     setShowShareMenu(true);
   };
 
-   const shareToWhatsApp = () => {
+  const shareToWhatsApp = () => {
     const text = `Check out this beautiful greeting for ${user.userName}!`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text + "\n" + capturedImage)}`, '_blank');
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(text + "\n" + capturedImage)}`,
+      "_blank",
+    );
   };
 
   // Copy Image Link
@@ -82,7 +79,7 @@ const handleShare = async () => {
 
   return (
     <div
-     ref={cardRef}
+      ref={cardRef}
       className="
       relative
 
@@ -127,7 +124,6 @@ const handleShare = async () => {
       {/* DARK OVERLAY */}
 
       <div
-      
         className="
         absolute
         inset-0
@@ -189,11 +185,9 @@ const handleShare = async () => {
         {user.userName}
       </h1>
 
-      {
-  template.isPremium && (
-
-    <div
-      className="
+      {template.isPremium && (
+        <div
+          className="
       absolute
       top-4
       right-4
@@ -212,18 +206,13 @@ const handleShare = async () => {
 
       shadow-lg
     "
-    >
-
-      ⭐ Premium
-
-    </div>
-  )
-}
+        >
+          ⭐ Premium
+        </div>
+      )}
       <button
-
-  onClick={handleShare}
-
-  className="
+        onClick={handleShare}
+        className="
   absolute
   bottom-4
   right-4
@@ -240,16 +229,16 @@ const handleShare = async () => {
   shadow-lg
   cursor-pointer
 "
->
+      >
+        Share
+      </button>
 
-  Share
-
-</button>
-
-{showShareMenu && capturedImage && (
+      {showShareMenu && capturedImage && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-80">
-            <h3 className="text-xl font-semibold text-center mb-5">Share via</h3>
+            <h3 className="text-xl font-semibold text-center mb-5">
+              Share via
+            </h3>
 
             <div className="grid grid-cols-2 gap-4">
               <button
@@ -272,7 +261,12 @@ const handleShare = async () => {
               </button>
 
               <button
-                onClick={() => window.open(`mailto:?subject=Birthday Wish&body=${encodeURIComponent(capturedImage)}`, '_blank')}
+                onClick={() =>
+                  window.open(
+                    `mailto:?subject=Birthday Wish&body=${encodeURIComponent(capturedImage)}`,
+                    "_blank",
+                  )
+                }
                 className="flex flex-col items-center gap-2 p-4 hover:bg-blue-50 rounded-xl"
               >
                 <FaEnvelope size={32} className="text-blue-500" />
@@ -298,16 +292,10 @@ const handleShare = async () => {
         </div>
       )}
 
-      {
-  showPremiumPopup && (
-
-    <div
-
-      onClick={() =>
-        setShowPremiumPopup(false)
-      }
-
-      className="
+      {showPremiumPopup && (
+        <div
+          onClick={() => setShowPremiumPopup(false)}
+          className="
       fixed
       inset-0
 
@@ -319,17 +307,12 @@ const handleShare = async () => {
 
       z-50
     "
-    >
+        >
+          {/* POPUP BOX */}
 
-      {/* POPUP BOX */}
-
-      <div
-
-        onClick={(e) =>
-          e.stopPropagation()
-        }
-
-        className="
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="
         bg-white
 
         w-[90%]
@@ -345,10 +328,9 @@ const handleShare = async () => {
 
         animate-[popup_0.3s_ease]
       "
-      >
-
-        <h1
-          className="
+          >
+            <h1
+              className="
           text-3xl
           font-bold
 
@@ -356,29 +338,22 @@ const handleShare = async () => {
 
           mb-4
         "
-        >
+            >
+              ⭐ Premium Template
+            </h1>
 
-          ⭐ Premium Template
-
-        </h1>
-
-
-        <p
-          className="
+            <p
+              className="
           text-gray-600
           text-lg
           leading-relaxed
         "
-        >
+            >
+              This template is available only for premium users.
+            </p>
 
-          This template is available
-          only for premium users.
-
-        </p>
-
-
-        <p
-          className="
+            <p
+              className="
           mt-4
 
           text-2xl
@@ -386,16 +361,12 @@ const handleShare = async () => {
 
           text-blue-600
         "
-        >
+            >
+              ₹99 / month
+            </p>
 
-          ₹99 / month
-
-        </p>
-
-
-        <button
-
-          className="
+            <button
+              className="
           mt-6
 
           w-full
@@ -418,41 +389,27 @@ const handleShare = async () => {
           transition-all
           duration-300
         "
-        >
+            >
+              Upgrade Now
+            </button>
 
-          Upgrade Now
-
-        </button>
-
-
-        <button
-
-          onClick={() =>
-            setShowPremiumPopup(false)
-          }
-
-          className="
+            <button
+              onClick={() => setShowPremiumPopup(false)}
+              className="
           mt-4
 
           text-gray-500
 
           font-medium
         "
-        >
-
-          Cancel
-
-        </button>
-
-      </div>
-
-    </div>
-  )
-}
-
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default TemplateCard;
-

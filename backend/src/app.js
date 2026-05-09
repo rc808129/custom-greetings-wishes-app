@@ -11,7 +11,6 @@ import authRoutes from './routes/authRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 
 const app = express()
-
 connectDB();
 app.use(cors())
 app.use(express.json())
